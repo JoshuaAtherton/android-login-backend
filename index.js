@@ -12,94 +12,20 @@ const pgp = require('pg-promise')();
 //We have to set ssl usage to true for Heroku to accept our connection
 pgp.pg.defaults.ssl = true;
 
-//Create connection to Heroku Database
-let db = pgp(process.env.DATABASE_URL);
-
-if (!db) {
-    console.log("SHAME! Follow the intructions and set your DATABASE_URL correctly");
-    process.exit(1);
-}
 
 /*
-* Hello world functions below...
+* Hello world functions link to module
 */
-app.get("/hello", (req, res) => {
-    res.send({
-        message: "Hello, you sent a GET request"
-    });
-});
-app.post("/hello", (req, res) => {
-    res.send({
-        message: "Hello, you sent a POST request"
-    });
-});
+app.use('/hello', require('./routes/hello.js'));
 
-app.get("/params", (req, res) => {
-    res.send({
-        //req.query is a reference to arguments in the url 
-        message: "Hello, " + req.query['name'] + "!"
-    });
-});
+//params endpoints
+app.use('/params', require('./routes/params.js'));
 
-app.post("/params", (req, res) => {
-    res.send({
-        //req.query is a reference to arguments in the POST body
-        message: "Hello, " + req.body['name'] + "! You sent a POST Request"
-    });
-});
-
-app.get("/wait", (req, res) => {
-    setTimeout(() => {
-        res.send({
-            message: "Thanks for waiting"
-        });
-    }, 1000);
-});
+//wait
+app.use('/wait', require('./routes/wait.js'));
 
 // SQL stuffs
-app.post("/demosql", (req, res) => {
-    var name = req.body['name'];
-
-    if (name) {
-        db.none("INSERT INTO DEMO(Text) VALUES ($1)", name).then(() => {
-            //We successfully added the name, let the user know 
-            res.send({
-                success: true
-            });
-        }).catch((err) => {
-            //log the error
-            console.log(err);
-            res.send({
-                success: false,
-                error: err
-            });
-        });
-    } else {
-        res.send({
-            success: false,
-            input: req.body,
-            error: "Missing required information"
-        });
-    }
-});
-
-
-app.get("/demosql", (req, res) => {
-
-    db.manyOrNone('SELECT Text FROM Demo')
-        //If successful, run function passed into .then() 
-        .then((data) => {
-            res.send({
-                success: true,
-                names: data
-            });
-        }).catch((error) => {
-            console.log(error); res.send({
-                success: false,
-                error: error
-        })
-    });
-});
+app.use('/demosql', require('./routes/demosql.js'));
 
 
 /*
