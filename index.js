@@ -18,6 +18,10 @@ app.use('/login', require('./routes/login.js'));
 
 //register endpoint
 app.use('/register', require('./routes/register.js'));
+
+// phish endpoint
+app.use('/phish', require('./routes/phish.js'));
+
 /*
 * Hello world functions link to module
 */
