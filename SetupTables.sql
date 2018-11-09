@@ -50,7 +50,15 @@ CREATE TABLE Locations (PrimaryKey SERIAL PRIMARY KEY,
                         FOREIGN KEY(MemberID) REFERENCES Members(MemberID)
 );
 
+DROP TABLE IF EXISTS FCM_Token;
+CREATE TABLE FCM_Token (KeyID SERIAL PRIMARY KEY, 
+                        MemberID INT NOT NULL UNIQUE, 
+                        Token VARCHAR(255), 
+                        FOREIGN KEY(MemberID) REFERENCES Members (MemberID) 
+);
+
 DROP TABLE IF EXISTS Demo;
 CREATE TABLE Demo (DemoID SERIAL PRIMARY KEY,
                         Text VARCHAR(255)
 );
+
