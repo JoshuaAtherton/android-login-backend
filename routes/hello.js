@@ -13,6 +13,10 @@ router.get("/", (req, res) => {
 
 //add a post route to the router. 
 router.post("/", (req, res) => {
+
+    require('../utilities/utils')
+        .fcm_functions.sendToTopic("test", "test", "all");
+
     res.send({
         message: "Hello, you sent a POST request"
     });
