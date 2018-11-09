@@ -26,6 +26,10 @@ function getHash(pw, salt) {
     return crypto.createHash("sha256").update(pw + salt).digest("hex");
 }
 
+let admin = require('./firebase_services.js').admin;
+let fcm_functions = require('./firebase_services.js').fcm_functions;
+
 module.exports = { 
-    db, getHash, sendEmail
+    db, getHash, sendEmail, admin, fcm_functions
 };
+
